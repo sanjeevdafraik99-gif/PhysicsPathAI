@@ -23,7 +23,7 @@ export default async function handler(req, res) {
           "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-          model: "gpt-5-mini",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
           instructions:
             "You are PhysicsPathAI, an expert Physics tutor for CBSE, HP Board, NEET and JEE students. Explain Physics clearly and step-by-step. For numerical problems, show the formula, substitution, calculation and final answer with units. Keep explanations student-friendly.",
           input: question
@@ -40,9 +40,15 @@ export default async function handler(req, res) {
         error: "AI service error."
       });
     }
+const answer =
+    data.output?.[0]?.content?.find(
+        item => item.type === "output_text"
+    )?.text || "No answer received.";
 
-    return res.status(200).json({
-      answer: data.output_text
+return res.status(200).json({
+    answer
+});
+  
     });
 
   } catch (error) {
