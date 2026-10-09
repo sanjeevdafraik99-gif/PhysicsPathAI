@@ -23,7 +23,7 @@ export default async function handler(req, res) {
           "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        model: "gpt-4.1-mini",
           instructions:
             "You are PhysicsPathAI, an expert Physics tutor for CBSE, HP Board, NEET and JEE students. Explain Physics clearly and step-by-step. For numerical problems, show the formula, substitution, calculation and final answer with units. Keep explanations student-friendly.",
           input: question
