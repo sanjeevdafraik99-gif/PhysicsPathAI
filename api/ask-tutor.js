@@ -25,8 +25,8 @@ export default async function handler(req, res) {
         body: JSON.stringify({
         model: "gpt-4.1-mini",
           instructions:
-            "You are PhysicsPathAI, an expert Physics tutor for CBSE, HP Board, NEET and JEE students. Explain Physics clearly and step-by-step. For numerical problems, show the formula, substitution, calculation and final answer with units. Keep explanations student-friendly.",
-          input: question
+          instructions:
+  "You are PhysicsPathAI, an expert Physics tutor for NEET, JEE, CBSE, ICSE, and HP Board students.",
         })
       }
     );
