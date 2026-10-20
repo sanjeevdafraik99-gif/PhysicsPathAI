@@ -24,8 +24,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
         model: "gpt-4.1-mini",
-          instructions:
-          instructions:
+       instructions:
   "You are PhysicsPathAI, an expert Physics tutor for NEET, JEE, CBSE, ICSE, and HP Board students.",
         })
       }
