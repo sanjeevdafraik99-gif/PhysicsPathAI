@@ -1,60 +1,101 @@
-<script>
-async function askTutor() {
-  const questionInput = document.getElementById("question");
-  const answer = document.getElementById("answer");
-  const button = document.querySelector("#ai button");
-
-  const question = questionInput.value.trim();
-
-  if (!question) {
-    answer.style.display = "block";
-    answer.textContent = "Please enter a Physics question first.";
-    return;
-  }
-
-  answer.style.display = "block";
-  answer.textContent = "🤖 PhysicsPathAI is solving your question...";
-
-  button.disabled = true;
-  button.textContent = "Please wait...";
-
-  try {
-    const response = await fetch("/api/ask-tutor", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ question: question })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Unable to get an answer. Please try again."
-      );
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhysicsPathAI - AI Physics Tutor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f0f6ff;
+      color: #123;
+      text-align: center;
     }
+    header {
+      background: #0757b8;
+      color: white;
+      padding: 25px 10px;
+    }
+    main {
+      max-width: 650px;
+      margin: 25px auto;
+      padding: 20px;
+    }
+    textarea {
+      width: 95%;
+      height: 130px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+    }
+    button {
+      background: #0757b8;
+      color: white;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin: 12px;
+    }
+    #answer {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PhysicsPathAI 🚀</h1>
+    <p>Your AI Physics Learning Partner</p>
+  </header>
 
-    answer.replaceChildren();
+  <main>
+    <h2>Ask a Physics Question</h2>
+    <p>For CBSE, ICSE, HP Board, NEET and JEE</p>
 
-    const heading = document.createElement("strong");
-    heading.textContent = "⚡ PhysicsPathAI Answer";
-    answer.appendChild(heading);
+    <textarea id="question" placeholder="Type your physics question here..."></textarea>
+    <br>
+    <button onclick="askQuestion()">Ask PhysicsPathAI</button>
 
-    const explanation = document.createElement("p");
-    explanation.style.whiteSpace = "pre-wrap";
-    explanation.style.marginTop = "10px";
-    explanation.textContent = data.answer;
-    answer.appendChild(explanation);
+    <div id="answer">Your answer will appear here.</div>
+  </main>
 
-  } catch (error) {
-    answer.textContent =
-      "Unable to connect to the AI Tutor. Please check your backend " +
-      "deployment and API configuration, then try again.";
-    console.error("PhysicsPathAI error:", error);
-  } finally {
-    button.disabled = false;
-    button.textContent = "Ask PhysicsPathAI";
-  }
-}
-</script>
+  <script>
+    async function askQuestion() {
+      const question = document.getElementById("question").value.trim();
+      const answer = document.getElementById("answer");
+
+      if (!question) {
+        answer.textContent = "Please enter a physics question.";
+        return;
+      }
+
+      answer.textContent = "Thinking...";
+
+      try {
+        const response = await fetch("/api/ask", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({question})
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Request failed.");
+        }
+
+        answer.textContent = data.answer || "No answer received.";
+      } catch (error) {
+        answer.textContent =
+          "The AI backend is not connected yet. Please configure the /api/ask backend.";
+      }
+    }
+  </script>
+</body>
+</html>
